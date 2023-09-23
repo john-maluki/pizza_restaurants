@@ -4,6 +4,14 @@ verify_ssl = true
 name = "pip_conf_index_global"
 
 [packages]
+flask = "*"
+faker = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+sqlalchemy-serializer = "*"
+pytest = "*"
+flask-restful = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
