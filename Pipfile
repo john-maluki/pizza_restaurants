@@ -12,6 +12,7 @@ sqlalchemy-serializer = "*"
 pytest = "*"
 flask-restful = "*"
 python-dotenv = "*"
+marshmallow = "*"
 
 [dev-packages]
 
