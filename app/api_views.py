@@ -87,9 +87,25 @@ class RestaurantByIdResourse(Resource):
             )
             return response
         except RestaurantNotFoundException as e:
-            message = {"error": str(e)}
-            response = make_response(message, 404, {"Content-Type": "application/json"})
+            return self.__restaurant_not_found_response(e)
+
+    def delete(self, id):
+        try:
+            restaurant = RestaurantService.delete_restaurant_by_id(id)
+
+            response = make_response(
+                restaurant_by_id_schema.dumps(restaurant),
+                204,
+                {"Content-Type": "application/json"},
+            )
             return response
+        except RestaurantNotFoundException as e:
+            return self.__restaurant_not_found_response(e)
+
+    def __restaurant_not_found_response(self, e):
+        message = {"error": str(e)}
+        response = make_response(message, 404, {"Content-Type": "application/json"})
+        return response
 
 
 rest_api.add_resource(RestaurantByIdResourse, "/restaurants/<int:id>")
