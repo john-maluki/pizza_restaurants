@@ -1,15 +1,18 @@
 from flask import Flask
-from app.extensions import extend_app
+from flask_migrate import Migrate
+from flask_restful import Api
+from app.models import db
 
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "jdbwejbfewub=wehdweh64wdhwvh-bhcb"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.json.compact = False
 
-def create_app():
-    app = Flask(__name__)
-    app.config["SECRET_KEY"] = "jdbwejbfewub=wehdweh64wdhwvh-bhcb"
-    extend_app(app)
-    return app
+migrate = Migrate(app, db)
+db.init_app(app)
 
+rest_api = Api(app)
 
-app = create_app()
-
-from app.views import api_views
-from app.db import models
+from app import api_views
+from app import models
