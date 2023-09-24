@@ -1,12 +1,10 @@
-from flask import make_response
+from flask import make_response, request
 from flask_restful import Resource
 from marshmallow import Schema, fields
 from app import rest_api
 
-from app.services import RestaurantService, PizzaService
-from app.exceptions import (
-    RestaurantNotFoundException,
-)
+from app.services import RestaurantService, PizzaService, RestaurantPizzaService
+from app.exceptions import RestaurantNotFoundException, ValueInputException
 
 
 class RestaurantSchema(Schema):
@@ -23,6 +21,7 @@ class PizzaSchema(Schema):
 
 
 pizzas_schema = PizzaSchema(many=True)
+pizza_schema = PizzaSchema()
 
 
 class RestaurantByIdSchema(Schema):
@@ -33,6 +32,15 @@ class RestaurantByIdSchema(Schema):
 
 
 restaurant_by_id_schema = RestaurantByIdSchema()
+
+
+class RestaurantPizzaSchema(Schema):
+    price = fields.Integer()
+    pizza_id = fields.Integer()
+    restaurant_id = fields.Integer()
+
+
+restaurant_pizzas_schema = RestaurantPizzaSchema(many=True)
 
 
 class HomeResource(Resource):
@@ -109,3 +117,36 @@ class RestaurantByIdResourse(Resource):
 
 
 rest_api.add_resource(RestaurantByIdResourse, "/restaurants/<int:id>")
+
+
+class RestaurantPizzaResourse(Resource):
+    def get(self):
+        restaurant_pizzas = RestaurantPizzaService.get_all_restaurant_pizzas()
+
+        response = make_response(
+            restaurant_pizzas_schema.dumps(restaurant_pizzas),
+            200,
+            {"Content-Type": "application/json"},
+        )
+
+        return response
+
+    def post(self):
+        try:
+            data = request.get_json()
+            pizza = RestaurantPizzaService.create_restaurant_pizza(**data)
+
+            response = make_response(
+                pizza_schema.dumps(pizza),
+                200,
+                {"Content-Type": "application/json"},
+            )
+
+            return response
+        except ValueInputException as e:
+            message = {"errors": e.args}
+            response = make_response(message, 400, {"Content-Type": "application/json"})
+            return response
+
+
+rest_api.add_resource(RestaurantPizzaResourse, "/restaurant_pizzas")

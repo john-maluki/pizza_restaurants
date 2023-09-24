@@ -1,7 +1,5 @@
 from app.models import Restaurant, Pizza, RestaurantPizza, db
-from app.exceptions import (
-    RestaurantNotFoundException,
-)
+from app.exceptions import RestaurantNotFoundException, ValueInputException
 
 
 class RestaurantService:
@@ -38,3 +36,18 @@ class PizzaService:
     def get_all_pizzas(cls):
         pizzas = Pizza.query.all()
         return pizzas
+
+
+class RestaurantPizzaService:
+    @classmethod
+    def get_all_restaurant_pizzas(cls):
+        restaurant_pizzas = RestaurantPizza.query.all()
+        return restaurant_pizzas
+
+    @classmethod
+    def create_restaurant_pizza(cls, **kwargs):
+        try:
+            pizza = RestaurantPizza.create_restaurant_pizza(**kwargs)
+            return pizza
+        except ValueInputException as e:
+            raise e

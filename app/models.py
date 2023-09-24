@@ -18,6 +18,11 @@ class Pizza(db.Model):
         "Restaurant", secondary="restaurant_pizzas", back_populates="pizzas"
     )
 
+    @classmethod
+    def get_pizza_by_id(cls, id):
+        pizza = cls.query.filter_by(id=id).first()
+        return pizza
+
     def __repr__(self):
         return f"<Pizza {self.name}>"
 
@@ -67,6 +72,13 @@ class RestaurantPizza(db.Model):
             return price
         else:
             raise ValueInputException("Must have a price between 1 and 30")
+
+    @classmethod
+    def create_restaurant_pizza(cls, price, pizza_id, restaurant_id):
+        rp = cls(price=price, pizza_id=pizza_id, restaurant_id=restaurant_id)
+        db.session.add(rp)
+        db.session.commit()
+        return Pizza.get_pizza_by_id(pizza_id)
 
     def __repr__(self):
         return f"<RestaurantPizza {self.price}>"
