@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2943ac3a2d2f233df95f78ad5120a66addfc4461132dde74d412f578a217f3d8"
+            "sha256": "61a1e276e038245923e0fa79b9cb5721c41eca06d10e177b21a0842f5e2a62be"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -168,6 +168,15 @@
             ],
             "markers": "platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
             "version": "==2.0.2"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:3213aa5e8c24949e792bcacfc176fef362e7aac80b76c56f6b5122bf350722f0",
+                "sha256:88ec8bff1d634f98e61b9f65bc4bf3cd918a90806c6f5c48bc5603849ec81033"
+            ],
+            "index": "pip_conf_index_global",
+            "markers": "python_version >= '3.5'",
+            "version": "==21.2.0"
         },
         "iniconfig": {
             "hashes": [
