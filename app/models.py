@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
+from app.exceptions import ValueInputException
 
 db = SQLAlchemy()
 
@@ -31,6 +33,15 @@ class Restaurant(db.Model):
         "Pizza", secondary="restaurant_pizzas", back_populates="restaurants"
     )
 
+    @validates("name")
+    def validate_name(self, key, name):
+        if not len(name.strip().split(" ")) < 50:
+            raise ValueInputException("Must have a name less than 50 words in length")
+        restaurant = Restaurant.query.filter_by(name=name).first()
+        if restaurant:
+            raise ValueInputException("Name value must be unique")
+        return name
+
     def __repr__(self):
         return f"<Restaurant {self.name} {self.address}>"
 
@@ -49,6 +60,13 @@ class RestaurantPizza(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    @validates("price")
+    def validate_price(self, key, price):
+        if isinstance(price, int) and (price >= 1 and price <= 30):
+            return price
+        else:
+            raise ValueInputException("Must have a price between 1 and 30")
 
     def __repr__(self):
         return f"<RestaurantPizza {self.price}>"
