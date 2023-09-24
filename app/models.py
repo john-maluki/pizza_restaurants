@@ -58,7 +58,7 @@ class RestaurantPizza(db.Model):
     price = db.Column(
         db.Integer,
         db.CheckConstraint(
-            "price >=1 AND price <=30", name="Price value is not with range 1 and 30"
+            "price >=1 AND price <=30", name="Price value is not within range 1 and 30"
         ),
     )
     pizza_id = db.Column(db.Integer, db.ForeignKey("pizzas.id"))
