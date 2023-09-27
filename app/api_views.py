@@ -1,10 +1,14 @@
 from flask import make_response, request
-from flask_restful import Resource
+from flask_restx import Resource, Namespace
 from marshmallow import Schema, fields
 from app import rest_api
 
 from app.services import RestaurantService, PizzaService, RestaurantPizzaService
 from app.exceptions import RestaurantNotFoundException, ValueInputException
+
+from app.api_models import restaurant_input_api_model
+
+ns = Namespace("/")
 
 
 class RestaurantSchema(Schema):
@@ -43,14 +47,7 @@ class RestaurantPizzaSchema(Schema):
 restaurant_pizzas_schema = RestaurantPizzaSchema(many=True)
 
 
-class HomeResource(Resource):
-    def get(self):
-        return {"message": "Flask Code Challenge - Pizza Restaurants"}
-
-
-rest_api.add_resource(HomeResource, "/")
-
-
+@ns.route("/pizzas")
 class PizzaResourse(Resource):
     def get(self):
         pizzas = PizzaService.get_all_pizzas()
@@ -64,9 +61,7 @@ class PizzaResourse(Resource):
         return response
 
 
-rest_api.add_resource(PizzaResourse, "/pizzas")
-
-
+@ns.route("/restaurants")
 class RestaurantResourse(Resource):
     def get(self):
         restaurants = RestaurantService.get_all_restaurants()
@@ -80,9 +75,7 @@ class RestaurantResourse(Resource):
         return response
 
 
-rest_api.add_resource(RestaurantResourse, "/restaurants")
-
-
+@ns.route("/restaurants/<int:id>")
 class RestaurantByIdResourse(Resource):
     def get(self, id):
         try:
@@ -116,9 +109,7 @@ class RestaurantByIdResourse(Resource):
         return response
 
 
-rest_api.add_resource(RestaurantByIdResourse, "/restaurants/<int:id>")
-
-
+@ns.route("/restaurant_pizzas")
 class RestaurantPizzaResourse(Resource):
     def get(self):
         restaurant_pizzas = RestaurantPizzaService.get_all_restaurant_pizzas()
@@ -131,6 +122,7 @@ class RestaurantPizzaResourse(Resource):
 
         return response
 
+    @ns.expect(restaurant_input_api_model)
     def post(self):
         try:
             data = request.get_json()
@@ -138,7 +130,7 @@ class RestaurantPizzaResourse(Resource):
 
             response = make_response(
                 pizza_schema.dumps(pizza),
-                200,
+                201,
                 {"Content-Type": "application/json"},
             )
 
@@ -147,6 +139,10 @@ class RestaurantPizzaResourse(Resource):
             message = {"errors": e.args}
             response = make_response(message, 400, {"Content-Type": "application/json"})
             return response
+        except Exception as e:
+            message = {"errors": e.args}
+            response = make_response(message, 400, {"Content-Type": "application/json"})
+            return response
 
 
-rest_api.add_resource(RestaurantPizzaResourse, "/restaurant_pizzas")
+rest_api.add_namespace(ns)

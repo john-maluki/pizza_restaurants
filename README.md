@@ -160,7 +160,7 @@ The following have been used on this project:
 
 This project uses SQLit3:
 
-[SQLite](https://www.sqlite.org/docs.html) - Acording to [SimpleLearn](www.simplilearn.com/tutorials/sql-tutorial/what-is-sqlite) SQLite is one of the most popular and easy-to-use relational database systems. It possesses many features over other relational databases. Many big MNCs such as Adobe, use SQLite as the application file format for their Photoshop Lightroom product. Airbus, a European multinational aerospace corporation, uses SQLite in the flight software for the A350 XWB family of aircraft. You will learn various concepts and get hands-on practice in this SQLite tutorial.
+[SQLite](https://www.sqlite.org/docs.html) - Acording to [SimpleLearn](https://www.simplilearn.com/tutorials/sql-tutorial/what-is-sqlite) SQLite is one of the most popular and easy-to-use relational database systems. It possesses many features over other relational databases. Many big MNCs such as Adobe, use SQLite as the application file format for their Photoshop Lightroom product. Airbus, a European multinational aerospace corporation, uses SQLite in the flight software for the A350 XWB family of aircraft. You will learn various concepts and get hands-on practice in this SQLite tutorial.
 
 ## Project Setup
 

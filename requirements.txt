@@ -21,3 +21,4 @@ six
 SQLAlchemy
 typing_extensions
 Werkzeug
+flask-restx
